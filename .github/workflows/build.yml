@@ -1,0 +1,37 @@
+
+name: Build Mall Admin
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build mall-admin
+        run: mvn -B -pl mall-admin -am -DskipTests package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: mall-admin-jar
+          path: |
+            mall-admin/target/*.jar
+            !mall-admin/target/original-*.jar
+            !mall-admin/target/*-sources.jar
+          if-no-files-found: error
+          retention-days: 30

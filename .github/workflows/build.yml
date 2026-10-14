@@ -23,7 +23,7 @@ jobs:
           cache: maven
 
       - name: Build mall-admin
-        run: mvn -B -pl mall-admin -am -DskipTests package
+        run: mvn -B -pl mall-admin -am -DskipTests -Ddocker.skip=true package
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
